@@ -125,7 +125,7 @@ function Header() {
   const initials = (user?.user_metadata?.full_name || user?.email || "U")
     .toString()
     .split(/[\s@]+/)
-    .map((p) => p[0])
+    .map((p: string) => p[0])
     .filter(Boolean)
     .slice(0, 2)
     .join("")
