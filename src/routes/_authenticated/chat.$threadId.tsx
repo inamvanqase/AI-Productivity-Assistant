@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
 import { useQuery } from "@tanstack/react-query";
@@ -36,18 +36,22 @@ function ChatWindow({ threadId, initialMessages }: { threadId: string; initialMe
   const scrollerRef = useRef<HTMLDivElement>(null);
   const taRef = useRef<HTMLTextAreaElement>(null);
 
-  const transport = new DefaultChatTransport({
-    api: "/api/chat",
-    body: { threadId },
-    fetch: async (url, init) => {
-      const { data } = await supabase.auth.getSession();
-      const headers = new Headers(init?.headers);
-      if (data.session?.access_token) {
-        headers.set("Authorization", `Bearer ${data.session.access_token}`);
-      }
-      return fetch(url, { ...init, headers });
-    },
-  });
+  const transport = useMemo(
+    () =>
+      new DefaultChatTransport({
+        api: "/api/chat",
+        body: { threadId },
+        fetch: async (url, init) => {
+          const { data } = await supabase.auth.getSession();
+          const headers = new Headers(init?.headers);
+          if (data.session?.access_token) {
+            headers.set("Authorization", `Bearer ${data.session.access_token}`);
+          }
+          return fetch(url, { ...init, headers });
+        },
+      }),
+    [threadId],
+  );
 
   const { messages, sendMessage, status } = useChat({
     id: threadId,
