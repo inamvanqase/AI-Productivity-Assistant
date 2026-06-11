@@ -13,6 +13,10 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as AuthenticatedTasksRouteImport } from './routes/_authenticated/tasks'
+import { Route as AuthenticatedPoliciesRouteImport } from './routes/_authenticated/policies'
+import { Route as AuthenticatedMeetingsRouteImport } from './routes/_authenticated/meetings'
+import { Route as AuthenticatedCommunicationRouteImport } from './routes/_authenticated/communication'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -33,14 +37,43 @@ const ApiChatRoute = ApiChatRouteImport.update({
   path: '/api/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedTasksRoute = AuthenticatedTasksRouteImport.update({
+  id: '/tasks',
+  path: '/tasks',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPoliciesRoute = AuthenticatedPoliciesRouteImport.update({
+  id: '/policies',
+  path: '/policies',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedMeetingsRoute = AuthenticatedMeetingsRouteImport.update({
+  id: '/meetings',
+  path: '/meetings',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedCommunicationRoute =
+  AuthenticatedCommunicationRouteImport.update({
+    id: '/communication',
+    path: '/communication',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/auth': typeof AuthRoute
+  '/communication': typeof AuthenticatedCommunicationRoute
+  '/meetings': typeof AuthenticatedMeetingsRoute
+  '/policies': typeof AuthenticatedPoliciesRoute
+  '/tasks': typeof AuthenticatedTasksRoute
   '/api/chat': typeof ApiChatRoute
 }
 export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
+  '/communication': typeof AuthenticatedCommunicationRoute
+  '/meetings': typeof AuthenticatedMeetingsRoute
+  '/policies': typeof AuthenticatedPoliciesRoute
+  '/tasks': typeof AuthenticatedTasksRoute
   '/api/chat': typeof ApiChatRoute
   '/': typeof AuthenticatedIndexRoute
 }
@@ -48,18 +81,40 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/communication': typeof AuthenticatedCommunicationRoute
+  '/_authenticated/meetings': typeof AuthenticatedMeetingsRoute
+  '/_authenticated/policies': typeof AuthenticatedPoliciesRoute
+  '/_authenticated/tasks': typeof AuthenticatedTasksRoute
   '/api/chat': typeof ApiChatRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/api/chat'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/communication'
+    | '/meetings'
+    | '/policies'
+    | '/tasks'
+    | '/api/chat'
   fileRoutesByTo: FileRoutesByTo
-  to: '/auth' | '/api/chat' | '/'
+  to:
+    | '/auth'
+    | '/communication'
+    | '/meetings'
+    | '/policies'
+    | '/tasks'
+    | '/api/chat'
+    | '/'
   id:
     | '__root__'
     | '/_authenticated'
     | '/auth'
+    | '/_authenticated/communication'
+    | '/_authenticated/meetings'
+    | '/_authenticated/policies'
+    | '/_authenticated/tasks'
     | '/api/chat'
     | '/_authenticated/'
   fileRoutesById: FileRoutesById
@@ -100,14 +155,50 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/tasks': {
+      id: '/_authenticated/tasks'
+      path: '/tasks'
+      fullPath: '/tasks'
+      preLoaderRoute: typeof AuthenticatedTasksRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/policies': {
+      id: '/_authenticated/policies'
+      path: '/policies'
+      fullPath: '/policies'
+      preLoaderRoute: typeof AuthenticatedPoliciesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/meetings': {
+      id: '/_authenticated/meetings'
+      path: '/meetings'
+      fullPath: '/meetings'
+      preLoaderRoute: typeof AuthenticatedMeetingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/communication': {
+      id: '/_authenticated/communication'
+      path: '/communication'
+      fullPath: '/communication'
+      preLoaderRoute: typeof AuthenticatedCommunicationRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedCommunicationRoute: typeof AuthenticatedCommunicationRoute
+  AuthenticatedMeetingsRoute: typeof AuthenticatedMeetingsRoute
+  AuthenticatedPoliciesRoute: typeof AuthenticatedPoliciesRoute
+  AuthenticatedTasksRoute: typeof AuthenticatedTasksRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedCommunicationRoute: AuthenticatedCommunicationRoute,
+  AuthenticatedMeetingsRoute: AuthenticatedMeetingsRoute,
+  AuthenticatedPoliciesRoute: AuthenticatedPoliciesRoute,
+  AuthenticatedTasksRoute: AuthenticatedTasksRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
 }
 
