@@ -37,7 +37,7 @@ export const Route = createFileRoute("/demo")({
 type Slide = {
   id: string;
   kicker?: string;
-  render: () => JSX.Element;
+  render: () => React.ReactElement;
 };
 
 function DemoPresentation() {
